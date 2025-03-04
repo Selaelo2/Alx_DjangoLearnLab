@@ -1,27 +1,39 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.views.generic import TemplateView
+from django.contrib.auth.views import LogoutView
 
-# Register View: Handle user registration
+# Function-based view for user registration
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            # Automatically log in the user after registration
-            username = form.cleaned_data.get('username')
-            user = form.save()
-            login(request, user)
-            return redirect('login')  # Redirect to login page after registration
+            form.save()  # Save the user to the database
+            return redirect('login')  # Redirect to login page after successful registration
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
 
-# Login View: Use Django's built-in login view
-class CustomLoginView(LoginView):
-    template_name = 'relationship_app/login.html'
+# Function-based view for user login
+def user_login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)  # Log the user in
+                return redirect('list_books')  # Redirect to books list after login
+            else:
+                form.add_error(None, 'Invalid username or password')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'relationship_app/login.html', {'form': form})
 
-# Logout View: Use Django's built-in logout view
-class CustomLogoutView(LogoutView):
-    next_page = '/'  # Redirect to homepage after logout
+# Function-based view for user logout
+def user_logout(request):
+    logout(request)  # Logs the user out
+    return redirect('login')  # Redirect to login page after logging out
