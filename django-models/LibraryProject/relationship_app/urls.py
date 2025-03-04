@@ -1,3 +1,4 @@
+from django import views
 from django.contrib import admin
 from django.urls import path, include  # include is required to include the app URLs
 from .views import list_books, LibraryDetailView
@@ -12,4 +13,7 @@ urlpatterns = [
     path('register/', views.register, name='register'),  # Registration view
     path('login/', LoginView.as_view(template_name='relationship_app/login.html'), name='login'),  # Login view
     path('logout/', LogoutView.as_view(template_name='relationship_app/logout.html'), name='logout'),  # Logout view
+    path('add/', views.add_book, name='add_book'),
+    path('edit/<int:book_id>/', views.edit_book, name='edit_book'),
+    path('delete/<int:book_id>/', views.delete_book, name='delete_book'),
 ]
