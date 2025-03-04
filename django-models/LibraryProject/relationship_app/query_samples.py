@@ -20,7 +20,9 @@ def get_books_in_library():
 def get_librarian_for_library():
     library_name = 'Central Library'
     library = Library.objects.get(name=library_name)
-    librarian = library.librarian  # Since it's a OneToOneField relationship
+    
+    # Using the OneToOne relationship to fetch the librarian of the given library
+    librarian = Librarian.objects.get(library=library)  # Query the librarian based on the related library
     print(f'Librarian for {library.name}: {librarian.name}')
 
 
