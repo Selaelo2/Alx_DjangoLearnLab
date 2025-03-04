@@ -14,10 +14,10 @@ urlpatterns = [
     path('login/', LoginView.as_view(template_name='relationship_app/login.html'), name='login'),  # Login view
     path('logout/', LogoutView.as_view(template_name='relationship_app/logout.html'), name='logout'),  # Logout view
     path('add/', views.add_book, name='add_book'),
-    
+
     # URL for editing a book (requires permission 'can_change_book')
     path('edit/<int:book_id>/', views.edit_book, name='edit_book'),
-    
+
     # URL for deleting a book (requires permission 'can_delete_book')
     path('delete/<int:book_id>/', views.delete_book, name='delete_book'),
 ]
