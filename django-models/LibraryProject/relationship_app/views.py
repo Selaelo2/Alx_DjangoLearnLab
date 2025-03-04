@@ -43,33 +43,34 @@ def user_logout(request):
 
 # Utility function to check if the user is an Admin
 # Utility function to check if the user is an Admin
-def is_admin(user):
-    return user.userprofile.role == 'Admin'
+class UserProfile(models.Model):
+    # Define choices for user roles
+    USER_ROLES = [
+        ('Admin', 'Admin'),
+        ('Librarian', 'Librarian'),
+        ('Member', 'Member'),
+    ]
+    
+    # One-to-one relationship with the built-in User model
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    
+    # Role field with choices for 'Admin', 'Librarian', and 'Member'
+    role = models.CharField(max_length=10, choices=USER_ROLES)
 
-# Admin view - Only accessible to users with the 'Admin' role
-@user_passes_test(is_admin)
-def admin_view(request):
-    return render(request, 'relationship_app/admin_view.html')
+    def __str__(self):
+        return f"{self.user.username} - {self.role}"
 
-# Utility function to check if the user is a Librarian
-def is_librarian(user):
-    return user.userprofile.role == 'Librarian'
+# Django signal to automatically create or update the UserProfile when a User is created/updated
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
-# Utility function to check if the user is a Member
-def is_member(user):
-    return user.userprofile.role == 'Member'
-
-# Admin view - Only accessible to users with the 'Admin' role
-@user_passes_test(is_admin)
-def admin_view(request):
-    return render(request, 'relationship_app/admin_view.html')
-
-# Librarian view - Only accessible to users with the 'Librarian' role
-@user_passes_test(is_librarian)
-def librarian_view(request):
-    return render(request, 'relationship_app/librarian_view.html')
-
-# Member view - Only accessible to users with the 'Member' role
-@user_passes_test(is_member)
-def member_view(request):
-    return render(request, 'relationship_app/member_view.html')
+# Signal to create or update UserProfile when a User is saved
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    """
+    This function creates or updates the UserProfile when a User instance is created or updated.
+    """
+    if created:
+        UserProfile.objects.create(user=instance)
+    # Save the UserProfile instance whenever the User instance is updated
+    instance.userprofile.save()
