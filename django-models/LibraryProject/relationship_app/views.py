@@ -42,8 +42,14 @@ def user_logout(request):
 
 
 # Utility function to check if the user is an Admin
+# Utility function to check if the user is an Admin
 def is_admin(user):
     return user.userprofile.role == 'Admin'
+
+# Admin view - Only accessible to users with the 'Admin' role
+@user_passes_test(is_admin)
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html')
 
 # Utility function to check if the user is a Librarian
 def is_librarian(user):
