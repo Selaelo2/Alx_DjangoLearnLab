@@ -19,4 +19,7 @@ from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+     path('books/', list_books, name='list_books'),  # Route for function-based view
+    path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),  # Route for class-based view
 ]
+
