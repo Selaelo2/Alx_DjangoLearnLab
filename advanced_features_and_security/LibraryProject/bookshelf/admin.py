@@ -11,23 +11,14 @@ class BookAdmin(admin.ModelAdmin):
     list_filter = ('publication_year',)
 
 
-class CustomUserAdmin(UserAdmin):
-    model = CustomUser
-    list_display = ['username', 'email', 'first_name', 'last_name', 'date_of_birth', 'profile_photo', 'is_staff']
-    list_filter = ['is_staff', 'is_superuser', 'date_of_birth']
-    search_fields = ['username', 'email']
-    ordering = ['username']
-    fieldsets = (
-        (None, {'fields': ('username', 'password')}),
-        ('Personal info', {'fields': ('first_name', 'last_name', 'email', 'date_of_birth', 'profile_photo')}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-        ('Important dates', {'fields': ('last_login', 'date_joined')}),
-    )
-    add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2', 'date_of_birth', 'profile_photo', 'is_staff', 'is_active'),
-        }),
-    )
+# bookshelf/models.py
+from django.contrib.auth.models import AbstractUser
+from django.db import models
 
-admin.site.register(CustomUser, CustomUserAdmin)
+class CustomUser(AbstractUser):
+    date_of_birth = models.DateField(null=True, blank=True)
+    profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
+
+    def __str__(self):
+        return self.username
+
