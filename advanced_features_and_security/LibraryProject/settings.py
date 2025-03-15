@@ -10,7 +10,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'your-secret-key-here'
 
 # Debug mode (set to False in production)
-DEBUG = True
+DEBUG = False
+SECURE_BROWSER_XSS_FILTER = True  # Protect against cross-site scripting (XSS)
+X_FRAME_OPTIONS = 'DENY'  # Prevent your site from being embedded in a frame to avoid clickjacking
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent browsers from interpreting files as something else
+CSRF_COOKIE_SECURE = True  # Ensures CSRF cookies are only sent over HTTPS
+SESSION_COOKIE_SECURE = True  # Ensures session cookies are only sent over HTTPS
+SECURE_SSL_REDIRECT = True
+
 
 # Allowed hosts (use '*' to allow all, but be more restrictive in production)
 ALLOWED_HOSTS = []
@@ -24,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bookshelf',  # Add your app here
+    'csp'
 ]
 
 # Middleware for handling requests
@@ -35,7 +43,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'",)
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'",)
 
 # URL configuration
 ROOT_URLCONF = 'LibraryProject.urls'
