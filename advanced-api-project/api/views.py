@@ -11,19 +11,17 @@ from rest_framework.filters import OrderingFilter
 
 
 # ListView: List all books
-class BookList(generics.ListAPIView):
-    """
-    API view to list all books.
-    GET: Retrieve all books.
-    """
+class BookList(generics.ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]  # Only authenticated users can add a book
-    filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
-    filterset_fields = ['title', 'author', 'publication_year']  # Allows filtering by these fields
-    search_fields = ['title', 'author']  # Allows searching by title and author
-    ordering_fields = ['title', 'publication_year']  # Allows ordering by title and publication year
-    ordering = ['title']  # Default ordering by title
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    
+    # Setup for filtering, search, and ordering
+    filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)  # Correctly including OrderingFilter
+    filterset_fields = ['title', 'author', 'publication_year']  # Fields you want to allow for filtering
+    search_fields = ['title', 'author']  # Fields that can be searched by
+    ordering_fields = ['title', 'publication_year']  # Fields that can be ordered by
+    ordering = ['title']  # Default ordering
 
 # CreateView: Create a new book
 class BookCreate(generics.CreateAPIView):
