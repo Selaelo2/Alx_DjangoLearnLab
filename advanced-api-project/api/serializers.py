@@ -42,3 +42,4 @@ class AuthorSerializer(serializers.ModelSerializer):
     books = BookSerializer(many=True, read_only=True)  # Nested serializer to serialize related books
 
 
+
