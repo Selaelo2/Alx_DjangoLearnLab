@@ -36,20 +36,12 @@ class BookDetail(generics.RetrieveAPIView):
 
 # UpdateView: Update an existing book
 class BookUpdate(generics.UpdateAPIView):
-    """
-    API view to update a book by ID.
-    PUT/PATCH: Update a book by ID (only for authenticated users).
-    """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticated]  # Only authenticated users can update a book
+    permission_classes = [IsAuthenticated] 
 
 # DeleteView: Delete a book by ID
 class BookDelete(generics.DestroyAPIView):
-    """
-    API view to delete a book by ID.
-    DELETE: Delete a book by ID (only for authenticated users).
-    """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]  # Only authenticated users can delete a book
