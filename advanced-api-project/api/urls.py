@@ -12,9 +12,9 @@ urlpatterns = [
     # Retrieve a specific book by ID
     path('books/<int:pk>/', BookDetail.as_view(), name='book-detail'),
 
-    # Update a specific book (with the book's ID)
-    path('books/<int:pk>/update/', BookUpdate.as_view(), name='book-update'),
+    # Update a specific book by ID
+    path('books/<int:pk>/update/', BookUpdate.as_view(), name='books/update'),
 
-    # Delete a specific book (with the book's ID)
-    path('books/<int:pk>/delete/', BookDelete.as_view(), name='book-delete'),
+    # Delete a specific book by ID
+    path('books/<int:pk>/delete/', BookDelete.as_view(), name='books/delete'),
 ]
