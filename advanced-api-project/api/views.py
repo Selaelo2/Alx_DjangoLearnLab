@@ -2,27 +2,22 @@
 from rest_framework import generics
 from .models import Book
 from .serializers import BookSerializer
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly  # Add this import
-from rest_framework.filters import OrderingFilter, SearchFilter
-from django_filters.rest_framework import DjangoFilterBackend  # Import here
-from django_filters.rest_framework import DjangoFilterBackend 
-from django_filters import rest_framework
-from rest_framework.filters import OrderingFilter
-
-
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.filters import OrderingFilter, SearchFilter  # Correct import for OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 # ListView: List all books
 class BookList(generics.ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    
+
     # Setup for filtering, search, and ordering
-    filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)  # Make sure OrderingFilter is included here
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]  # OrderingFilter is included here
     filterset_fields = ['title', 'author', 'publication_year']  # Allow filtering by these fields
     search_fields = ['title', 'author']  # Allow searching by title and author
     ordering_fields = ['title', 'publication_year']  # Allow ordering by title and publication year
-    ordering = ['title'] 
+    ordering = ['title']  # Default ordering
 
 # CreateView: Create a new book
 class BookCreate(generics.CreateAPIView):
@@ -48,7 +43,7 @@ class BookDetail(generics.RetrieveAPIView):
 class BookUpdate(generics.UpdateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticated] 
+    permission_classes = [IsAuthenticated]
 
 # DeleteView: Delete a book by ID
 class BookDelete(generics.DestroyAPIView):
