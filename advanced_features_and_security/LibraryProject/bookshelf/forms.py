@@ -3,15 +3,11 @@
 from django import forms
 from .models import Book
 
-class BookForm(forms.ModelForm):
-    # You can define custom fields or modify the ModelForm here
-    title = forms.CharField(max_length=255, required=True)
-    author = forms.CharField(max_length=255, required=True)
+class ExampleForm(forms.Form):
+    title = forms.CharField(max_length=255, required=True, label="Book Title")
+    author = forms.CharField(max_length=255, required=True, label="Author")
+    description = forms.CharField(widget=forms.Textarea, required=True, label="Description")
     
-    class Meta:
-        model = Book
-        fields = ['title', 'author', 'description']  # Ensure this matches your model's fields
-
     def clean_title(self):
         title = self.cleaned_data.get('title')
         if len(title) < 3:
