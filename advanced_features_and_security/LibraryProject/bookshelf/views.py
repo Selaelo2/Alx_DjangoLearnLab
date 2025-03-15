@@ -51,3 +51,28 @@ def delete_book(request, book_id):
     book.delete()
     return redirect('book_list')  # Redirect to the book list after deletion
 
+# bookshelf/views.py
+
+from django.shortcuts import render, redirect
+from .forms import ExampleForm  # This is the import you need to add
+from .models import Book
+
+def example_form_view(request):
+    if request.method == "POST":
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            # Save data or process it as needed
+            title = form.cleaned_data['title']
+            author = form.cleaned_data['author']
+            description = form.cleaned_data['description']
+            
+            # Optionally, save this data into the Book model
+            Book.objects.create(title=title, author=author, description=description)
+
+            return redirect('book_list')  # Redirect to book list or another view after form submission
+    else:
+        form = ExampleForm()
+
+    return render(request, 'bookshelf/example_form.html', {'form': form})
+
+
