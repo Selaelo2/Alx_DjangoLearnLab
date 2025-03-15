@@ -40,6 +40,8 @@ X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True
 # Enable browser XSS filtering
 SECURE_BROWSER_XSS_FILTER = True
+# Trust the 'X-Forwarded-Proto' header from the proxy to detect if the request is using HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # CSP (Content Security Policy) settings (Optional - Add `django-csp` middleware if using)
