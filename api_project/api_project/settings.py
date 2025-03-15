@@ -26,6 +26,11 @@ SECRET_KEY = 'django-insecure-&m*9=6$3fvb4b++cn!gvpa=c%k1t1earzg))=p9tnn2jc2^#v+
 DEBUG = True
 
 ALLOWED_HOSTS = []
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',  # Use Token Authentication
+    ],
+}
 
 
 # Application definition
@@ -37,8 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-     'rest_framework',
-       'api',
+    'rest_framework',
+    'api',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
