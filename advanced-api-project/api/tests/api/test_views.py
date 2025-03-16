@@ -20,8 +20,8 @@ class BookAPITests(APITestCase):
             author=self.author
         )
 
-        # Authenticate the test user
-        self.client.force_authenticate(user=self.user)
+        # Log in the test user
+        self.client.login(username='testuser', password='testpassword')
 
     def test_create_book(self):
         """
@@ -115,3 +115,13 @@ class BookAPITests(APITestCase):
         url = reverse('book-list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_authenticated_access(self):
+        """
+        Ensure authenticated users can access protected endpoints.
+        """
+        # Log in the test user
+        self.client.login(username='testuser', password='testpassword')
+        url = reverse('book-list')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
