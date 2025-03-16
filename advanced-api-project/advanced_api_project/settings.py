@@ -26,6 +26,13 @@ SECRET_KEY = 'django-insecure-$wmv_%7cs#%&tanc7gk$)&vc24#4#^&dc@#%#7pm9q0!v&e-ay
 DEBUG = True
 
 ALLOWED_HOSTS = []
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',  # Enable filtering
+        'rest_framework.filters.SearchFilter',  # Enable searching
+        'rest_framework.filters.OrderingFilter',  # Enable ordering
+    ],
+}
 
 
 # Application definition
@@ -37,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'rest_framework',
     'api'
 ]
