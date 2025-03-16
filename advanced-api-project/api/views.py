@@ -1,17 +1,20 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Author, Book
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
 # Author Views
 class AuthorListView(ListView):
     model = Author
     template_name = 'author_list.html'  # Template for listing authors
     context_object_name = 'authors'
+    permission_classes = [IsAuthenticatedOrReadOnly]  # Allow read-only access to unauthenticate
 
 class AuthorDetailView(DetailView):
     model = Author
     template_name = 'author_detail.html'  # Template for author details
     context_object_name = 'author'
+    permission_classes = [IsAuthenticated]
 
 class AuthorCreateView(CreateView):
     model = Author
@@ -35,11 +38,13 @@ class BookListView(ListView):
     model = Book
     template_name = 'book_list.html'  # Template for listing books
     context_object_name = 'books'
+    permission_classes = [IsAuthenticatedOrReadOnly] 
 
 class BookDetailView(DetailView):
     model = Book
     template_name = 'book_detail.html'  # Template for book details
     context_object_name = 'book'
+    permission_classes = [IsAuthenticated]
 
 class BookCreateView(CreateView):
     model = Book
