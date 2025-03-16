@@ -4,6 +4,8 @@ from django.urls import reverse_lazy
 from rest_framework.filters import SearchFilter, OrderingFilter
 from .models import Author, Book
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from django_filters import rest_framework
+from rest_framework import generics
 
 # Author Views
 class AuthorListView(ListView):
