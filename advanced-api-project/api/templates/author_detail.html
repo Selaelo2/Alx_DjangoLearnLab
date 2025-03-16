@@ -1,0 +1,7 @@
+<h1>{{ author.name }}</h1>
+<a href="{% url 'author-update' author.pk %}">Edit</a>
+<form action="{% url 'author-delete' author.pk %}" method="post">
+  {% csrf_token %}
+  <button type="submit">Delete</button>
+</form>
+<a href="{% url 'author-list' %}">Back to List</a>
