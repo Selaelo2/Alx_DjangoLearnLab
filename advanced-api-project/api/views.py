@@ -42,7 +42,7 @@ class BookListView(ListView):
     template_name = 'book_list.html'  # Template for listing books
     context_object_name = 'books'
     permission_classes = [IsAuthenticatedOrReadOnly] 
-    filter_backends = [filters.DjangoFilterBackend, SearchFilter, OrderingFilter]  # Correctly includes OrderingFilter
+    filter_backends = [filters.DjangoFilterBackend, SearchFilter, filters.OrderingFilter]  # Correctly includes OrderingFilter
     filterset_class = BookFilter  # Use the custom filter class
     search_fields = ['title', 'author__name']  # Fields to search
     ordering_fields = ['title', 'publication_year']  # Fields to order by
