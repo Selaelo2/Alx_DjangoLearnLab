@@ -2,8 +2,21 @@
 <p>{{ post.content }}</p>
 <p>Published on: {{ post.published_date }}</p>
 <p>Author: {{ post.author.username }}</p>
-{% if user == post.author %}
-<a href="{% url 'post_update' post.pk %}">Edit</a>
-<a href="{% url 'post_delete' post.pk %}">Delete</a>
+
+<h2>Comments</h2>
+{% for comment in post.comments.all %}
+<div>
+  <p>{{ comment.content }}</p>
+  <p>By: {{ comment.author.username }} on {{ comment.created_at }}</p>
+  {% if user == comment.author %}
+  <a href="{% url 'edit_comment' comment.id %}">Edit</a>
+  <a href="{% url 'delete_comment' comment.id %}">Delete</a>
+  {% endif %}
+</div>
+{% endfor %}
+
+{% if user.is_authenticated %}
+<a href="{% url 'add_comment' post.id %}">Add a Comment</a>
+{% else %}
+<p><a href="{% url 'login' %}">Log in</a> to leave a comment.</p>
 {% endif %}
-<a href="{% url 'post_list' %}">Back to Posts</a>
