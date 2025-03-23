@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm
@@ -10,11 +10,10 @@ from django.urls import reverse_lazy
 from .models import Post, Comment
 from .forms import PostForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+
 from .forms import CommentForm
 from django.db.models import Q
-from django.shortcuts import render
+
 
 def register_view(request):
     if request.method == "POST":
@@ -195,3 +194,20 @@ def search_posts(request):
 def posts_by_tag(request, tag):
     posts = Post.objects.filter(tags__name=tag)
     return render(request, "blog/posts_by_tag.html", {"posts": posts, "tag": tag})
+
+from django.views.generic import ListView
+from .models import Post, Tag
+
+class PostByTagListView(ListView):
+    model = Post
+    template_name = "blog/post_list.html"
+    context_object_name = "posts"
+
+    def get_queryset(self):
+        tag_slug = self.kwargs.get("tag_slug")
+        return Post.objects.filter(tags__slug=tag_slug)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tag"] = self.kwargs.get("tag_slug")
+        return context
