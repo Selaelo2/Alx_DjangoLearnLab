@@ -13,6 +13,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import CommentForm
+from django.db.models import Q
+from django.shortcuts import render
 
 def register_view(request):
     if request.method == "POST":
@@ -179,3 +181,17 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy("post_detail", kwargs={"pk": self.object.post.id})
+    
+def search_posts(request):
+    query = request.GET.get("q")
+    if query:
+        posts = Post.objects.filter(
+            Q(title__icontains=query) | Q(content__icontains=query) | Q(tags__name__icontains=query)
+        ).distinct()
+    else:
+        posts = Post.objects.none()
+    return render(request, "blog/search_results.html", {"posts": posts, "query": query})
+
+def posts_by_tag(request, tag):
+    posts = Post.objects.filter(tags__name=tag)
+    return render(request, "blog/posts_by_tag.html", {"posts": posts, "tag": tag})
